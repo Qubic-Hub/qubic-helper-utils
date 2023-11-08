@@ -1,0 +1,29 @@
+{
+  "name": "qubic-helper-node",
+  "version": "1.0.0",
+  "description": "A node.js version of the Qubic helper utilities allowing for seed - publicID generation and transfer signing",
+  "main": "dist/app.js",
+  "scripts": {
+    "start": "tsc && npx fix-esm-import-path dist/js/index.js && node dist/js/index.js",
+    "bundle": "tsc && npx fix-esm-import-path dist/js/index.js && npx esbuild dist/js/index.js --bundle --outfile=dist/app.js --platform=node --target=node16 --minify --sourcemap",
+    "build-windows": "npx pkg --debug  -o dist/packaged/qubic-helper-win-64.exe --targets node16-win-x64  dist/js/index.out.js",
+    "build-linux": "npx pkg --debug -o dist/packaged/qubic-helper-linux-x64 --targets node16-linux-x64  dist/js/index.out.js",
+    "build-mac-arm": "npx pkg --debug -o dist/packaged/qubic-helper-mac-arm64 --targets node16-mac-arm64  dist/js/index.out.js",
+    "build-mac": "npx pkg --debug -o dist/packaged/qubic-helper-mac-x64 --targets node16-mac-x64  dist/js/index.out.js",
+    "lint": "eslint . --ext .ts",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bignumber.js": "^9.1.1",
+    "command-line-args": "^5.2.1"
+  },
+  "devDependencies": {
+    "@types/command-line-args": "^5.2.3",
+    "@types/node": "^20.9.0",
+    "esbuild": "0.19.5",
+    "fix-esm-import-path": "^1.4.2",
+    "typescript": "^5.2.2"
+  }
+}
