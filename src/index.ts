@@ -64,6 +64,8 @@ try {
     clearTimeout(timer);
   }
 } catch (error) {
-  process.stdout.write(JSON.stringify({ status: "error", error: error }));
+  process.stdout.write(
+    JSON.stringify({ args: process.argv, status: "error", error: error })
+  );
   clearTimeout(timer);
 }
