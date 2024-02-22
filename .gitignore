@@ -1,7 +1,3 @@
-/node_modules
-/dist
-/out
-npm-debug.log
-
-.DS_Store
-Thumbs.db
+node_modules/
+dist/
+.parcel_cache/

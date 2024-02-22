@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<head>
+  <script type="module">
+    import {
+      QubicInterface,
+      arrayBufferToBase64,
+    } from "./lib/qubicInterface.ts";
+
+    window.qInterface = new QubicInterface();
+    window.arrayBufferToBase64 = arrayBufferToBase64;
+  </script>
+</head>

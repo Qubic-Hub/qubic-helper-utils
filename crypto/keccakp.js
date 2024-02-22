@@ -1,4 +1,3 @@
-
 // Source: https://github.com/paulmillr/noble-hashes/blob/299905c98bdf1a197023198c8fe678923483896d/src/sha3.ts
 
 /*
@@ -30,8 +29,12 @@ const _32n = BigInt(32);
 
 // We are not using BigUint64Array, because they are extremely slow as per 2022
 function fromBig(n, le = false) {
-  if (le) return { h: Number(n & U32_MASK64), l: Number((n >> _32n) & U32_MASK64) };
-  return { h: Number((n >> _32n) & U32_MASK64) | 0, l: Number(n & U32_MASK64) | 0 };
+  if (le)
+    return { h: Number(n & U32_MASK64), l: Number((n >> _32n) & U32_MASK64) };
+  return {
+    h: Number((n >> _32n) & U32_MASK64) | 0,
+    l: Number(n & U32_MASK64) | 0,
+  };
 }
 
 function split(lst, le = false) {
@@ -73,8 +76,7 @@ function add(Ah, Al, Bh, Bl) {
 }
 // Addition with more than 2 elements
 const add3L = (Al, Bl, Cl) => (Al >>> 0) + (Bl >>> 0) + (Cl >>> 0);
-const add3H = (low, Ah, Bh, Ch) =>
-  (Ah + Bh + Ch + ((low / 2 ** 32) | 0)) | 0;
+const add3H = (low, Ah, Bh, Ch) => (Ah + Bh + Ch + ((low / 2 ** 32) | 0)) | 0;
 const add4L = (Al, Bl, Cl, Dl) =>
   (Al >>> 0) + (Bl >>> 0) + (Cl >>> 0) + (Dl >>> 0);
 const add4H = (low, Ah, Bh, Ch, Dh) =>
@@ -118,10 +120,8 @@ for (let round = 0, R = _1n, x = 1, y = 0; round < 24; round++) {
 }
 const [SHA3_IOTA_H, SHA3_IOTA_L] = u64.split(_SHA3_IOTA, true);
 
-const rotlH = (h, l, s) =>
-  s > 32 ? u64.rotlBH(h, l, s) : u64.rotlSH(h, l, s);
-const rotlL = (h, l, s) =>
-  s > 32 ? u64.rotlBL(h, l, s) : u64.rotlSL(h, l, s);
+const rotlH = (h, l, s) => (s > 32 ? u64.rotlBH(h, l, s) : u64.rotlSH(h, l, s));
+const rotlL = (h, l, s) => (s > 32 ? u64.rotlBL(h, l, s) : u64.rotlSL(h, l, s));
 
 export function keccakP160012(s1) {
   const s = new Uint32Array(s1.buffer);
@@ -129,7 +129,8 @@ export function keccakP160012(s1) {
   const B = new Uint32Array(5 * 2);
   for (let round = 24 - rounds; round < 24; round++) {
     // Theta θ
-    for (let x = 0; x < 10; x++) B[x] = s[x] ^ s[x + 10] ^ s[x + 20] ^ s[x + 30] ^ s[x + 40];
+    for (let x = 0; x < 10; x++)
+      B[x] = s[x] ^ s[x + 10] ^ s[x + 20] ^ s[x + 30] ^ s[x + 40];
     for (let x = 0; x < 10; x += 2) {
       const idx1 = (x + 8) % 10;
       const idx0 = (x + 2) % 10;
@@ -158,7 +159,8 @@ export function keccakP160012(s1) {
     // Chi (χ)
     for (let y = 0; y < 50; y += 10) {
       for (let x = 0; x < 10; x++) B[x] = s[y + x];
-      for (let x = 0; x < 10; x++) s[y + x] ^= ~B[(x + 2) % 10] & B[(x + 4) % 10];
+      for (let x = 0; x < 10; x++)
+        s[y + x] ^= ~B[(x + 2) % 10] & B[(x + 4) % 10];
     }
     // Iota (ι)
     s[0] ^= SHA3_IOTA_H[round];
