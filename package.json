@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "bignumber.js": "^4.0.4",
+    "functioneer": "^1.0.4",
     "qubic-ts-library": "^0.0.7"
   }
 }
