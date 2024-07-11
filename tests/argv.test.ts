@@ -33,7 +33,7 @@ describe("runArgv", () => {
     //expect(output["status"]).toEqual("error");
   });
 
-  it("should return publicId, public key in B64 and private key in B4 for private seed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", async () => {
+  it("should return publicId, public key in B64 and private key in B4 for private seed aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa as a JSON string", async () => {
     jest.replaceProperty(process, "argv", [
       "node",
       "index.js",
@@ -42,13 +42,42 @@ describe("runArgv", () => {
     ]);
     const output = await runArgv();
     expect(output).toEqual(
-      JSON.stringify({
-        publicId:
-          "BZBQFLLBNCXEMGLOBHUVFTLUPLVCPQUASSILFABOFFBCADQSSUPNWLZBQEXK",
-        publicKeyB64: "H1kNA+YTvd7Ti0wIIKxEYV+RrxJDWYCz7ePAjDFaJUQ=",
-        privateKeyB64: "RFNRLx71l7NlzDhPCisQzrXJT1FrkRrMjovBtV5kbHQ=",
-        status: "ok",
-      })
+      '{"publicId":"BZBQFLLBNCXEMGLOBHUVFTLUPLVCPQUASSILFABOFFBCADQSSUPNWLZBQEXK","publicKeyB64":"H1kNA+YTvd7Ti0wIIKxEYV+RrxJDWYCz7ePAjDFaJUQ=","privateKeyB64":"RFNRLx71l7NlzDhPCisQzrXJT1FrkRrMjovBtV5kbHQ=","status":"ok"}'
+    );
+  });
+
+  it("should return appropriate payload for transfer asset as a JSON string", async () => {
+    jest.replaceProperty(process, "argv", [
+      "node",
+      "index.js",
+      "createTransactionAssetMove",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "ASSETNAME",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB",
+      "1",
+      "10000000",
+    ]);
+    const output = await runArgv();
+    expect(output).toEqual(
+      '{"transaction":"H1kNA+YTvd7Ti0wIIKxEYV+RrxJDWYCz7ePAjDFaJUQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEBCDwAAAAAAgJaYAAIAUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQVNTRVROQU0BAAAAAAAAALeE6hXICPI46k8ivouJv23KLKJ+O/B90RUZb71mAYaPYigkuWpWF3PgLPiIDJGWc21ZXnTuYhlGvvS9V7gIDQA=","status":"ok"}'
+    );
+  });
+
+  it("should return appropriate payload for transfer funds as a JSON string", async () => {
+    jest.replaceProperty(process, "argv", [
+      "node",
+      "index.js",
+      "createTransaction",
+      "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "10000",
+      "10000000",
+    ]);
+
+    const output = await runArgv();
+    expect(output).toEqual(
+      '{"transaction":"H1kNA+YTvd7Ti0wIIKxEYV+RrxJDWYCz7ePAjDFaJUQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAnAAAAAAAAgJaYAAAAAAALYtCM56ZJoIzY0Iq4MFgeNH/HTNG/fNwEULHczxoEK4dF9CJmYobaRPP1GdGVSBR/a9EEyyVZiasSDfBk/QQA","status":"ok"}'
     );
   });
 

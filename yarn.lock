@@ -633,6 +633,11 @@
     bignumber.js "^9.1.2"
     net "^1.0.2"
 
+"@qubic-lib/qubic-ts-vault-library@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@qubic-lib/qubic-ts-vault-library/-/qubic-ts-vault-library-1.0.1.tgz"
+  integrity sha512-rq+MbKJAhmqIx8ZJn/WDsTYDP5wGZekTGTyFWTIpXxlPTTweTbXIvXmwaPgSStCQkaDLDStMEIugPb23akF88Q==
+
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
   resolved "https://registry.npmjs.org/@sinclair/typebox/-/typebox-0.27.8.tgz"
