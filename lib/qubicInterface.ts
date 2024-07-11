@@ -1,9 +1,9 @@
-import { QubicHelper } from "@qubic-lib/qubic-ts-library/dist/qubicHelper";
 import { RequestPackageTypes } from "./requestPackageTypes";
+import { QubicHelper } from "@qubic-lib/qubic-ts-library/dist/qubicHelper";
+import { QubicTransferAssetPayload } from "@qubic-lib/qubic-ts-library/dist/qubic-types/transacion-payloads/QubicTransferAssetPayload";
 import { QubicTransaction } from "@qubic-lib/qubic-ts-library/dist/qubic-types/QubicTransaction";
 import { RequestResponseHeader } from "@qubic-lib/qubic-ts-library/dist/qubic-communication/RequestResponseHeader";
 import { PublicKey } from "@qubic-lib/qubic-ts-library/dist/qubic-types/PublicKey";
-import { QubicTransferAssetPayload } from "@qubic-lib/qubic-ts-library/dist/qubic-types/transacion-payloads/QubicTransferAssetPayload";
 import { QubicDefinitions } from "@qubic-lib/qubic-ts-library/dist/QubicDefinitions";
 
 export function encodeBase64Bytes(bytes: Uint8Array): string {
@@ -50,7 +50,7 @@ export class QubicInterface {
     return {
       publicId: result.publicId,
       publicKeyB64: arrayBufferToBase64(result.publicKey),
-      privateKeyB64: arrayBufferToBase64(result.publicKey),
+      privateKeyB64: arrayBufferToBase64(result.privateKey),
     };
   }
 
@@ -103,7 +103,7 @@ export class QubicInterface {
 
     const assetTransfer = new QubicTransferAssetPayload()
       .setIssuer(assetIssuer)
-      .setNewOwnerAndPossessor(targetAddress)
+      .setNewOwnerAndPossessor(destinationPublicId)
       .setAssetName(assetName)
       .setNumberOfUnits(numberOfUnits);
 

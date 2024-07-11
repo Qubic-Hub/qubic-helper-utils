@@ -3,8 +3,6 @@ import { addFunction as createPublicId } from "./createPublicId";
 import { addFunction as createTransaction } from "./createTransaction";
 import { addFunction as createTransactionAssetMove } from "./createTransactionAssetMove";
 
-
-
 export function addFunctions(func: Functioneer) {
   // Register all functions with the functioneer
   createPublicId(func);
@@ -39,20 +37,24 @@ export async function runArgv() {
 export async function runBrowser(functionName: string, ...args: any[]) {
   const func = new Functioneer({
     showHelpOnError: false,
-    returnJSONString: false,
+    returnJSONString: true,
   });
 
   addFunctions(func);
-  const result = (await func.run(functionName, args)) as FunctionRunResult;
-  if (result.success === true) {
-    return {
-      ...result.result,
+  const result = (await func.run(functionName, args)) as string;
+  const resObj = JSON.parse(result) as FunctionRunResult;
+
+  if (resObj.success === true) {
+    const resultData = JSON.parse(resObj.result);
+    const out = {
+      ...resultData,
       status: "ok",
     };
+    return out;
   } else {
     return {
       status: "error",
-      error: result.message,
+      error: JSON.parse(result).message,
     };
   }
 }
