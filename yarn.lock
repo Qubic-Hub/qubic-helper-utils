@@ -633,11 +633,10 @@
     bignumber.js "^9.1.2"
     net "^1.0.2"
 
-<<<<<<< HEAD
-"@qubic-lib/qubic-ts-vault-library@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.npmjs.org/@qubic-lib/qubic-ts-vault-library/-/qubic-ts-vault-library-1.0.1.tgz"
-  integrity sha512-rq+MbKJAhmqIx8ZJn/WDsTYDP5wGZekTGTyFWTIpXxlPTTweTbXIvXmwaPgSStCQkaDLDStMEIugPb23akF88Q==
+"@qubic-lib/qubic-ts-vault-library@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@qubic-lib/qubic-ts-vault-library/-/qubic-ts-vault-library-1.0.2.tgz"
+  integrity sha512-sgaMOVUcakLT7sCTTMIn5k2mrToZhVHmlqGKgamDA7McRvg0i1e5L5SHjNQ4jOc9koyJ48f1qZRHAfeCG6LyzQ==
 
 "@sinclair/typebox@^0.27.8":
   version "0.27.8"
@@ -718,9 +717,6 @@
     "@types/istanbul-lib-report" "*"
 
 "@types/node@*", "@types/node@^20.11.17":
-=======
-"@types/node@^20.11.17":
->>>>>>> main
   version "20.11.17"
   resolved "https://registry.npmjs.org/@types/node/-/node-20.11.17.tgz"
   integrity sha512-QmgQZGWu1Yw9TDyAP9ZzpFJKynYNeOvwMJmaxABfieQoVoiVOS6MN1WSpqpRcbeA5+RW82kraAVxCCJg+780Qw==

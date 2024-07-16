@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "@qubic-lib/qubic-ts-library": "^0.1.2",
-    "@qubic-lib/qubic-ts-vault-library": "^1.0.1",
+    "@qubic-lib/qubic-ts-vault-library": "^1.0.2",
     "bignumber.js": "^4.0.4",
     "functioneer": "^1.0.4",
     "qubic-ts-library": "^0.0.7",
