@@ -25,6 +25,8 @@ export class WalletService {
     name: "RSA-OAEP",
   };
 
+  private crypto: any;
+
   constructor(private persistence = true) {
     // create empty configuration
     this.runningConfiguration = {
@@ -34,6 +36,18 @@ export class WalletService {
       useBridge: false,
       enableBeta: false,
     };
+
+    let sc: any;
+    if (
+      typeof process !== "undefined" &&
+      process.versions &&
+      process.versions.node
+    ) {
+      const wc = require("crypto").webcrypto;
+      this.crypto = wc;
+    } else {
+      this.crypto = crypto;
+    }
   }
 
   private async loadConfig(config: IConfig) {
@@ -45,7 +59,7 @@ export class WalletService {
 
     // convert json key to internal cryptokey
     if (this.runningConfiguration.publicKey) {
-      const k = await crypto.subtle.importKey(
+      const k = await this.crypto.subtle.importKey(
         "jwk",
         this.runningConfiguration.publicKey,
         this.rsaAlg,
@@ -83,7 +97,7 @@ export class WalletService {
   }
 
   private async encrypt(message: string): Promise<ArrayBuffer> {
-    return crypto.subtle
+    return this.crypto.subtle
       .encrypt(this.encAlg, this.publicKey!, new TextEncoder().encode(message))
       .then((emessage) => {
         return emessage;
@@ -110,17 +124,14 @@ export class WalletService {
     const enc = new TextEncoder();
     const pw = enc.encode(password);
 
-    return (<any>crypto.subtle).importKey(
-      "raw",
-      pw,
-      { name: "PBKDF2" },
-      false,
-      ["deriveBits", "deriveKey"]
-    );
+    return this.crypto.subtle.importKey("raw", pw, { name: "PBKDF2" }, false, [
+      "deriveBits",
+      "deriveKey",
+    ]);
   }
   private async deriveKey(pwKey: CryptoKey) {
     const salt = new Uint8Array(16).fill(0);
-    return crypto.subtle.deriveKey(
+    return this.crypto.subtle.deriveKey(
       {
         name: "PBKDF2",
         salt,
@@ -139,7 +150,7 @@ export class WalletService {
 
     const pwKey = await this.importKey(password);
     const wrapKey = await this.deriveKey(pwKey);
-    const jsonKey = await crypto.subtle.wrapKey(
+    const jsonKey = await this.crypto.subtle.wrapKey(
       "jwk",
       this.privateKey!,
       wrapKey,
@@ -181,14 +192,14 @@ export class WalletService {
   private async getVaultFileKey(password: string, salt: any) {
     const passwordBytes = this.stringToBytes(password);
 
-    const initialKey = await crypto.subtle.importKey(
+    const initialKey = await this.crypto.subtle.importKey(
       "raw",
       passwordBytes,
       { name: "PBKDF2" },
       false,
       ["deriveKey"]
     );
-    return crypto.subtle.deriveKey(
+    return this.crypto.subtle.deriveKey(
       { name: "PBKDF2", salt, iterations: 100000, hash: "SHA-256" },
       initialKey,
       { name: "AES-GCM", length: 256 },
@@ -200,14 +211,18 @@ export class WalletService {
     vaultFile: IVaultFile,
     password: string
   ): Promise<IEncryptedVaultFile> {
-    const salt = crypto.getRandomValues(new Uint8Array(16));
+    const salt = this.crypto.getRandomValues(new Uint8Array(16));
     const key = await this.getVaultFileKey(password, salt);
 
-    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const iv = this.crypto.getRandomValues(new Uint8Array(12));
     const contentBytes = this.stringToBytes(JSON.stringify(vaultFile));
 
     const cipher = new Uint8Array(
-      await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, contentBytes)
+      await this.crypto.subtle.encrypt(
+        { name: "AES-GCM", iv },
+        key,
+        contentBytes
+      )
     );
 
     return {
@@ -220,8 +235,8 @@ export class WalletService {
   public async exportVault(password: string): Promise<string> {
     if (!this.privateKey || !this.runningConfiguration.publicKey)
       return Promise.reject("Private- or PublicKey not loaded");
-
     const jsonKey = await this.createJsonKey(password);
+
     if (jsonKey === null) {
       return Promise.reject("JSONKEY IS NULL");
     }
@@ -237,8 +252,8 @@ export class WalletService {
     const fileData = new TextEncoder().encode(
       JSON.stringify(encryptedVaultFile)
     );
-    const blob = new Blob([fileData], { type: "application/octet-stream" });
-    const name = this.runningConfiguration.name ?? "qubic-wallet";
+    //const blob = new Blob([fileData], { type: "application/octet-stream" });
+    //const name = this.runningConfiguration.name ?? "qubic-wallet";
 
     //this.downloadBlob(name + ".qubic-vault", blob);
     //this.shouldExportKey = false;
@@ -268,14 +283,14 @@ export class WalletService {
   ) {
     this.publicKey = publicKey;
     // also push the current publickey to the running configuration
-    const jwk = await crypto.subtle.exportKey("jwk", this.publicKey!);
+    const jwk = await this.crypto.subtle.exportKey("jwk", this.publicKey!);
     this.runningConfiguration.publicKey = jwk;
 
     if (privateKey) this.privateKey = privateKey;
   }
 
   public async createNewKeys() {
-    const key = await crypto.subtle.generateKey(this.rsaAlg, true, [
+    const key = await this.crypto.subtle.generateKey(this.rsaAlg, true, [
       "encrypt",
       "decrypt",
     ]);

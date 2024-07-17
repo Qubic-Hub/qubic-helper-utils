@@ -43,6 +43,7 @@ export function addFunction(func: Functioneer) {
             encryptedSeed: "",
           });
         }
+
         const wService = new WalletService();
         await wService.createNewKeys();
         wService.runningConfiguration.name = "exported";
