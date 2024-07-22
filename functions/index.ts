@@ -4,13 +4,14 @@ import { addFunction as createTransaction } from "./createTransaction";
 import { addFunction as createTransactionAssetMove } from "./createTransactionAssetMove";
 
 import { addFunctions as keyManagement } from "./walletKeyManagement";
-
+import { addFunction as vaultImporter } from "./walletImporter";
 export function addFunctions(func: Functioneer) {
   // Register all functions with the functioneer
   createPublicId(func);
   createTransaction(func);
   createTransactionAssetMove(func);
   keyManagement(func);
+  vaultImporter(func);
 }
 
 export async function runArgv() {

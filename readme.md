@@ -80,6 +80,24 @@ will result in:
 "status": "ok"
 }
 
+### Read the contents of a vault file
+
+`qubic-helper wallet.importVaultFile 1234578a "C:\my files\file.qubic-vault"
+Will result in: 
+`{"seeds":[{"alias":"....","seed":"...."}],"status":"ok"}`
+
+Will not run in browser
+
+### Read the contents of a base64 string
+
+Will only run in browser
+runBrowser("wallet.importVault","123456a!","eyJ.............................==");
+
+Will result in
+`{
+"seeds": [ {"alias":"alias1","publicId":"BZBQFLLBNCXEMGLOBHUVFTLUPLVCPQUASSILFABOFFBCADQSSUPNWLZBQEXK", "seed":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"}]
+}
+
 ### Error handling
 
 Errors will result in
