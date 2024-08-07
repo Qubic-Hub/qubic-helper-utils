@@ -58,13 +58,11 @@ export function addFunction(func: Functioneer) {
           const seeds = [];
 
           for (const seed of importedSeeds) {
-            if (seed.isOnlyWatch == null || seed.isOnlyWatch == false) {
-              seeds.push({
-                alias: seed.alias,
-                seed: await walletImporter.revealSeed(seed.publicId),
-                publicId: seed.publicId,
-              });
-            }
+            seeds.push({
+              alias: seed.alias,
+              seed: await walletImporter.revealSeed(seed.publicId),
+              publicId: seed.publicId,
+            });
           }
 
           return JSON.stringify({

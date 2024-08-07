@@ -119,6 +119,7 @@ export class WalletImporter {
 
   public async revealSeed(publicId: string): Promise<string> {
     const seed = this.getSeed(publicId);
+    if (seed === undefined) return Promise.reject(null);
     try {
       const decryptedSeed = await this.decrypt(
         this.privateKey!,
